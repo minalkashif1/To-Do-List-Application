@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/USER")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -19,18 +19,19 @@ public class UserController {
         return userService.getUsers();
     }
 
-    @GetMapping("/{user_id}")
-    public User getTaskById(@PathVariable long user_id) {
-        return userService.getUserById(user_id);
+    @GetMapping("/{userId}")
+    public User getTaskById(@PathVariable("userId") long userId) {
+        return userService.getUserById(userId);
     }
 
-    @PostMapping("/ADDUSER")
+
+    @PostMapping("/addUser")
     public User addUser(@RequestBody User user) {
         return userService.addUser(user);
     }
 
     @GetMapping("/{user_id}/velocity")
-    public int getUserVelocity(@PathVariable Long user_id) {
+    public int getUserVelocity(@PathVariable("user_id") Long user_id) {
         return userService.getVelocityByUserId(user_id);
     }
 

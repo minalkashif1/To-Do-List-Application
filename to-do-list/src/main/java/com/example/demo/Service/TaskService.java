@@ -25,9 +25,9 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task getTaskById(long t_id)
+    public Task getTaskById(long tId)
     {
-        return taskRepository.findById(t_id).orElse(new Task());
+        return taskRepository.findById(tId).orElse(new Task());
     }
 
     public void addTask(Task task)
@@ -49,14 +49,14 @@ public class TaskService {
     }
 
 
-    public void assignTaskToUser(Long taskId, Long userId) {
+    public Task assignTaskToUser(Long taskId, Long userId) {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         task.setUser(user);
-        taskRepository.save(task);
+        return taskRepository.save(task);
     }
 
     public List<Task> getTasksByPriority(Priority priority) {

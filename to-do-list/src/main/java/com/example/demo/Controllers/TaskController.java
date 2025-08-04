@@ -18,40 +18,41 @@ public class TaskController {
     TaskService service;
 
     @GetMapping
-    public List<Task> getTasks()
-    {
+    public List<Task> getTasks() {
         return service.getTasks();
     }
 
     @GetMapping("/{task_id}")
-    public Task getTaskById(@PathVariable long task_id)
-    {
+    public Task getTaskById(@PathVariable long task_id) {
         return service.getTaskById(task_id);
     }
 
     @PostMapping
-    public void addTask(@RequestBody Task task)
-    {
+    public void addTask(@RequestBody Task task) {
         service.addTask(task);
     }
 
     @PostMapping("/{taskId}/user/{userId}")
-    public ResponseEntity<String> assignTaskToUser(@PathVariable Long taskId, @PathVariable Long userId) {
-        service.assignTaskToUser(taskId, userId);
-        return ResponseEntity.ok("Task assigned successfully.");
+    public ResponseEntity<Task> assignTaskToUser(
+            @PathVariable("taskId") Long taskId,
+            @PathVariable("userId") Long userId) {
+
+        Task updatedTask = service.assignTaskToUser(taskId, userId);
+        return ResponseEntity.ok(updatedTask);
     }
+
 
     @PostMapping("/{taskId}/status/{status}")
     public ResponseEntity<String> updateTaskStatus(
-            @PathVariable Long taskId,
-            @PathVariable Status status) {
+            @PathVariable("taskId") Long taskId,
+            @PathVariable("status") Status status) {
 
         service.updateTaskStatus(taskId, status);
         return ResponseEntity.ok("Task status updated successfully.");
     }
 
     @GetMapping("/priority/{priority}")
-    public List<Task> getTasksByPriority(@PathVariable Priority priority) {
+    public List<Task> getTasksByPriority(@PathVariable("priority") Priority priority) {
         return service.getTasksByPriority(priority);
     }
 
@@ -60,25 +61,11 @@ public class TaskController {
         return service.getAllTasksSortedByPriority();
     }
 
-    @GetMapping("/USER/{userId}")
-    public List<Task> getTasksByUserId(@PathVariable Long userId) {
+    @GetMapping("/user/{userId}")
+    public List<Task> getTasksByUserId(@PathVariable("userId") Long userId) {
         return service.getTasksByUserId(userId);
     }
 
 
-
-
-/*
-    @RequestMapping("/task/update")
-    public void updateTask(Task task)
-    {
-        service.updateTask(task);
-    }
-
-    @RequestMapping("/task/{id}")
-    public void deleteTaskById(Long t_id)
-    {
-        service.deleteTaskById(t_id);
-    }
-*/
 }
+

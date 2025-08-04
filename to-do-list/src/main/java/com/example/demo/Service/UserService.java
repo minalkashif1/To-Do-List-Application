@@ -6,6 +6,7 @@ import com.example.demo.Repository.TaskRepository;
 import com.example.demo.Repository.UserRepository;
 import com.example.demo.enums.Status;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -29,23 +30,32 @@ public class UserService {
     }
 
 
-    public User getUserById(long u_id) {
-        User user = userRepository.findById(u_id).orElse(new User());
+    public User getUserById(long uId) {
+        User user = userRepository.findById(uId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
         int calculatedVelocity = getVelocityByUserId(user.getId());
         user.setVelocity(calculatedVelocity);
+
         return user;
     }
 
 
-    public User addUser(@RequestBody User user)
-    {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public User addUser(@RequestBody User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new RuntimeException("Username '" + user.getUsername() + "' is already taken.");
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("USER");
+
         return userRepository.save(user);
-
-
     }
+
 
     public void updateUser(User user)
     {
@@ -55,9 +65,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteTaskById(Long u_id)
+    public void deleteTaskById(Long uId)
     {
-        userRepository.deleteById(u_id);
+        userRepository.deleteById(uId);
     }
 
     public int getVelocityByUserId(Long userId) {

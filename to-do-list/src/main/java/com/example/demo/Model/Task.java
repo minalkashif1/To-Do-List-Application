@@ -12,11 +12,11 @@ import java.time.LocalDateTime;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "Task_ID")
+    @Column(name = "taskId")
     private Long id;
 
     private String description;
-    private com.example.demo.enums.Priority priority;
+    private Priority priority;
     @Enumerated(EnumType.STRING)
     private Status status= Status.PENDING;
 
@@ -27,7 +27,7 @@ public class Task {
 
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "userId")
     @JsonIgnoreProperties("tasks")
     private User user;
 
